@@ -1,292 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>IoT Smart Mirror — Project Tracker</title>
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#1a1a1a;min-height:100vh;padding:2rem 1rem}
-  .wrap{max-width:900px;margin:0 auto}
-
-  /* Header */
-  .header{margin-bottom:2rem}
-  .top-row{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
-  .title{font-size:22px;font-weight:700;color:#1a1a1a}
-  .subtitle{font-size:14px;color:#888;margin-top:4px}
-  .team-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .chip{font-size:12px;background:#fff;border:0.5px solid #ddd;border-radius:99px;padding:4px 12px;color:#555}
-  .chip.member{background:#E1F5EE;border-color:#9FE1CB;color:#0F6E56;font-weight:500}
-
-  /* Progress */
-  .progress-wrap{margin-top:1.25rem}
-  .progress-bar-bg{background:#e5e5e5;border-radius:99px;height:7px;overflow:hidden}
-  .progress-bar{height:7px;border-radius:99px;background:#1D9E75;transition:width 0.4s}
-  .progress-label{font-size:12px;color:#999;margin-top:6px}
-
-  /* Legend */
-  .legend{display:flex;gap:16px;margin:1.25rem 0 0.5rem;flex-wrap:wrap;align-items:center;justify-content:space-between}
-  .legend-left{display:flex;gap:16px;flex-wrap:wrap}
-  .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#666}
-  .dot{width:8px;height:8px;border-radius:50%}
-  .dot-done{background:#1D9E75}.dot-prog{background:#EF9F27}.dot-todo{background:#ccc}
-  .legend-hint{font-size:11px;color:#bbb}
-
-  /* Grid */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:0.75rem}
-  .card{background:#fff;border:0.5px solid #e0e0e0;border-radius:12px;padding:1rem;cursor:pointer;transition:border-color 0.15s,box-shadow 0.15s}
-  .card:hover{border-color:#bbb;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-  .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-  .card-num{font-size:11px;font-weight:600;color:#aaa;letter-spacing:0.05em}
-  .badge{font-size:11px;padding:2px 9px;border-radius:99px;font-weight:500;cursor:pointer;user-select:none;white-space:nowrap}
-  .badge-done{background:#E1F5EE;color:#0F6E56}
-  .badge-in-progress{background:#FAEEDA;color:#854F0B}
-  .badge-todo{background:#f0f0f0;color:#888}
-  .card-title{font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:4px}
-  .card-desc{font-size:12px;color:#888;line-height:1.55}
-  .card-note{font-size:12px;color:#444;margin-top:8px;background:#fafafa;border-radius:8px;padding:6px 8px;border:0.5px solid #eee;line-height:1.5}
-  .card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
-  .card-hint{font-size:11px;color:#ccc}
-  .edit-btn{font-size:11px;color:#1D9E75;background:none;border:none;cursor:pointer;padding:0;font-family:inherit}
-
-  /* Modal */
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:100;align-items:center;justify-content:center}
-  .modal-overlay.open{display:flex}
-  .modal{background:#fff;border-radius:16px;padding:1.5rem;width:100%;max-width:420px;margin:1rem}
-  .modal h3{font-size:16px;font-weight:600;margin-bottom:4px;color:#1a1a1a}
-  .modal p{font-size:13px;color:#888;margin-bottom:1rem}
-  .modal select,.modal textarea{width:100%;border:0.5px solid #ddd;border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;color:#1a1a1a;background:#fff}
-  .modal textarea{height:90px;resize:vertical}
-  .modal-btns{display:flex;gap:8px;justify-content:flex-end}
-  .btn{font-size:13px;padding:7px 16px;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:500}
-  .btn-cancel{background:#f0f0f0;border:none;color:#555}
-  .btn-save{background:#1D9E75;border:none;color:#fff}
-  .btn-cancel:hover{background:#e5e5e5}
-  .btn-save:hover{background:#0F6E56}
-
-  /* Export banner */
-  .banner{background:#fff;border:0.5px solid #e0e0e0;border-radius:12px;padding:1rem 1.25rem;margin-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-  .banner-text{font-size:13px;color:#555}
-  .banner-text strong{color:#1a1a1a;font-weight:600}
-  .banner-btns{display:flex;gap:8px;flex-wrap:wrap}
-  .banner-btn{font-size:12px;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:500;border:0.5px solid #ddd;background:#f8f8f8;color:#444;transition:background 0.15s}
-  .banner-btn:hover{background:#efefef}
-  .banner-btn.primary{background:#1D9E75;color:#fff;border-color:#1D9E75}
-  .banner-btn.primary:hover{background:#0F6E56}
-
-  /* Toast */
-  .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;font-size:13px;padding:8px 18px;border-radius:99px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:200;white-space:nowrap}
-  .toast.show{opacity:1}
-
-  /* Footer */
-  .footer{text-align:center;font-size:12px;color:#bbb;margin-top:2rem;padding-bottom:1rem}
-
-  @media(max-width:500px){.grid{grid-template-columns:1fr}.top-row{flex-direction:column}}
-</style>
+  <title>Smart Mirror</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="wrap">
+<canvas id="particles"></canvas>
+<div class="container">
 
-  <div class="header">
-    <div class="top-row">
-      <div>
-        <div class="title">IoT Smart Mirror — Project Tracker</div>
-        <div class="subtitle">Smart Campus Environmental Monitoring · Mini Project</div>
-      </div>
+  <!-- TOP -->
+  <div class="top">
+    <div>
+      <div id="time"></div>
+      <div id="date"></div>
     </div>
-    <div class="team-chips">
-      <span class="chip member">Aditya Das</span>
-      <span class="chip member">Pankaj Vijay Vargiya</span>
-      <span class="chip member">Mora Prathyusha</span>
-      <span class="chip">ESP32</span>
-      <span class="chip">Two-Way Mirror</span>
-      <span class="chip">IoT Sensors</span>
-      <span class="chip">Cloud Platform</span>
-      <span class="chip">LED Display</span>
+
+    <div id="weather"></div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- ALERT -->
+    <div id="alertBox" class="alert hidden">
+      ⚠️ Air Quality Poor!
     </div>
-    <div class="progress-wrap">
-      <div class="progress-bar-bg"><div class="progress-bar" id="pbar"></div></div>
-      <div class="progress-label" id="plabel"></div>
+
+    <!-- ANNOUNCEMENTS -->
+    <div class="card">
+      <h2>📢 Announcements</h2>
+      <ul id="announcements"></ul>
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="right">
+    <div class="card">
+      <h2>📅 Timetable</h2>
+      <ul id="timetable"></ul>
     </div>
   </div>
 
-  <div class="legend">
-    <div class="legend-left">
-      <div class="legend-item"><div class="dot dot-done"></div>Done</div>
-      <div class="legend-item"><div class="dot dot-prog"></div>In progress</div>
-      <div class="legend-item"><div class="dot dot-todo"></div>Not started</div>
-    </div>
-    <div class="legend-hint">Click badge to cycle status · Click card to add notes</div>
+  <!-- BOTTOM -->
+ <div class="bottom">
+
+  <div class="sensor-box">
+    🌡️ Temp
+    <div id="temp">--</div>
   </div>
 
-  <div class="grid" id="grid"></div>
-
-  <div class="banner">
-    <div class="banner-text"><strong>Share with teammates</strong> — changes save locally in each browser. Use the export button to share progress as a JSON file.</div>
-    <div class="banner-btns">
-      <button class="banner-btn" onclick="importData()">Import JSON</button>
-      <button class="banner-btn primary" onclick="exportData()">Export JSON</button>
-    </div>
+  <div class="sensor-box">
+    💧 Humidity
+    <div id="hum">--</div>
   </div>
 
-  <div class="footer">IoT Smart Mirror · Mini Project · Built with GitHub Pages</div>
+  <div class="sensor-box">
+    🌫️ Air
+    <div id="air">--</div>
+  </div>
+
 </div>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <h3 id="modal-title"></h3>
-    <p>Update status and add notes for this section.</p>
-    <select id="modal-status">
-      <option value="todo">Not started</option>
-      <option value="in-progress">In progress</option>
-      <option value="done">Done</option>
-    </select>
-    <textarea id="modal-notes" placeholder="Add notes, key points, or reminders for your team..."></textarea>
-    <div class="modal-btns">
-      <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-save" onclick="saveModal()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- Hidden import input -->
-<input type="file" id="file-input" accept=".json" style="display:none" onchange="handleImport(event)"/>
-
-<div class="toast" id="toast"></div>
-
-<script>
-const defaultSections = [
-  {num:"01",title:"Abstract",desc:"Project summary, hook line, system overview.",status:"done",notes:"Completed. ~175 words with catchy opening line."},
-  {num:"02",title:"Introduction",desc:"Background, motivation, and scope of the project.",status:"done",notes:"Completed. Covers IoT context, campus problem, ESP32 system overview."},
-  {num:"03",title:"Problem Statement",desc:"Define the gap or issue this project solves.",status:"todo",notes:""},
-  {num:"04",title:"Objectives",desc:"Clear, measurable goals of the project.",status:"todo",notes:""},
-  {num:"05",title:"Literature Review",desc:"Review of existing similar systems and research.",status:"todo",notes:""},
-  {num:"06",title:"System Architecture",desc:"Block diagram, data flow, overall system design.",status:"todo",notes:""},
-  {num:"07",title:"Hardware & Software",desc:"Components list, tools, and tech stack used.",status:"todo",notes:""},
-  {num:"08",title:"Methodology",desc:"Step-by-step implementation and working approach.",status:"todo",notes:""},
-  {num:"09",title:"Results & Discussion",desc:"Outcomes, screenshots, sensor readings, analysis.",status:"todo",notes:""},
-  {num:"10",title:"Conclusion",desc:"Summary of what was achieved and its impact.",status:"todo",notes:""},
-  {num:"11",title:"Future Work",desc:"Enhancements, AI features, scalability plans.",status:"todo",notes:""},
-  {num:"12",title:"References",desc:"Citations, papers, and resources used.",status:"todo",notes:""},
-];
-
-const KEY = "smart_mirror_v2";
-let sections = JSON.parse(localStorage.getItem(KEY) || "null") || defaultSections;
-let editingIdx = null;
-
-function save(){ localStorage.setItem(KEY, JSON.stringify(sections)); }
-
-function badgeClass(s){ return s==="done"?"badge-done":s==="in-progress"?"badge-in-progress":"badge-todo"; }
-function badgeLabel(s){ return s==="done"?"Done":s==="in-progress"?"In progress":"Not started"; }
-function nextStatus(s){ return s==="todo"?"in-progress":s==="in-progress"?"done":"todo"; }
-
-function render(){
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
-  sections.forEach((s,i)=>{
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="card-top">
-        <span class="card-num">SECTION ${s.num}</span>
-        <span class="badge ${badgeClass(s.status)}" onclick="cycleStatus(event,${i})">${badgeLabel(s.status)}</span>
-      </div>
-      <div class="card-title">${s.title}</div>
-      <div class="card-desc">${s.desc}</div>
-      ${s.notes ? `<div class="card-note">${s.notes}</div>` : ""}
-      <div class="card-footer">
-        <span class="card-hint">click to edit</span>
-        <button class="edit-btn" onclick="openModal(event,${i})">Edit notes ↗</button>
-      </div>
-    `;
-    card.addEventListener("click", ()=>openModal(null,i));
-    grid.appendChild(card);
-  });
-  updateProgress();
-}
-
-function cycleStatus(e,i){
-  e.stopPropagation();
-  sections[i].status = nextStatus(sections[i].status);
-  save(); render();
-  showToast(`Section ${sections[i].num} → ${badgeLabel(sections[i].status)}`);
-}
-
-function updateProgress(){
-  const done = sections.filter(s=>s.status==="done").length;
-  const pct = Math.round((done/sections.length)*100);
-  document.getElementById("pbar").style.width = pct+"%";
-  document.getElementById("plabel").textContent = `${done} of ${sections.length} sections completed (${pct}%)`;
-}
-
-function openModal(e,i){
-  if(e) e.stopPropagation();
-  editingIdx = i;
-  document.getElementById("modal-title").textContent = `Section ${sections[i].num} — ${sections[i].title}`;
-  document.getElementById("modal-status").value = sections[i].status;
-  document.getElementById("modal-notes").value = sections[i].notes || "";
-  document.getElementById("modal").classList.add("open");
-}
-
-function closeModal(){
-  document.getElementById("modal").classList.remove("open");
-  editingIdx = null;
-}
-
-function saveModal(){
-  sections[editingIdx].status = document.getElementById("modal-status").value;
-  sections[editingIdx].notes = document.getElementById("modal-notes").value.trim();
-  save(); render(); closeModal();
-  showToast("Section updated");
-}
-
-function exportData(){
-  const blob = new Blob([JSON.stringify(sections, null, 2)], {type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "smart_mirror_progress.json";
-  a.click();
-  showToast("Progress exported as JSON");
-}
-
-function importData(){
-  document.getElementById("file-input").click();
-}
-
-function handleImport(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev){
-    try{
-      const data = JSON.parse(ev.target.result);
-      if(Array.isArray(data) && data.length === 12){
-        sections = data;
-        save(); render();
-        showToast("Progress imported successfully");
-      } else {
-        showToast("Invalid file format");
-      }
-    } catch {
-      showToast("Could not read file");
-    }
-  };
-  reader.readAsText(file);
-  e.target.value = "";
-}
-
-function showToast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"), 2200);
-}
-
-document.getElementById("modal").addEventListener("click", function(e){
-  if(e.target===this) closeModal();
-});
-
-render();
-</script>
+<script src="script.js"></script>
 </body>
 </html>
