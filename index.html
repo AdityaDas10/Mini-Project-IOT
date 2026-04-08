@@ -1,40 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Smart Mirror</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
 <canvas id="particles"></canvas>
+
 <div class="container">
 
-  <!-- TOP -->
+  <!-- TOP: Clock + Weather -->
   <div class="top">
     <div>
       <div id="time"></div>
       <div id="date"></div>
     </div>
-
-    <div id="weather"></div>
+    <div id="weather">Loading weather...</div>
   </div>
 
-  <!-- CENTER -->
+  <!-- ALERT -->
+  <div id="alertBox" class="alert hidden">
+    ⚠️ Air Quality Poor! Stay indoors if possible.
+  </div>
+
+  <!-- CENTER: Announcements -->
   <div class="center">
-
-    <!-- ALERT -->
-    <div id="alertBox" class="alert hidden">
-      ⚠️ Air Quality Poor!
-    </div>
-
-    <!-- ANNOUNCEMENTS -->
     <div class="card">
       <h2>📢 Announcements</h2>
       <ul id="announcements"></ul>
+      <!-- INPUT ROW — required for addAnnouncement() to work -->
+      <div class="ann-input-row">
+        <input
+          id="ann-input"
+          class="ann-input"
+          placeholder="Add announcement..."
+          maxlength="100"
+          onkeydown="if(event.key==='Enter') addAnnouncement()"
+        />
+        <button class="ann-btn" onclick="addAnnouncement()">Post</button>
+      </div>
     </div>
-
   </div>
 
-  <!-- RIGHT SIDE -->
+  <!-- RIGHT: Timetable -->
   <div class="right">
     <div class="card">
       <h2>📅 Timetable</h2>
@@ -42,22 +53,31 @@
     </div>
   </div>
 
-  <!-- BOTTOM -->
- <div class="bottom">
-
-  <div class="sensor-box">
-    🌡️ Temp
-    <div id="temp">--</div>
-  </div>
-
-  <div class="sensor-box">
-    💧 Humidity
-    <div id="hum">--</div>
-  </div>
-
-  <div class="sensor-box">
-    🌫️ Air
-    <div id="air">--</div>
+  <!-- BOTTOM: Sensors -->
+  <div class="bottom">
+    <div class="sensor-box">
+      <div class="sensor-icon">🌡️</div>
+      <div class="sensor-label">Temperature</div>
+      <div id="temp" class="sensor-val">--</div>
+      <div class="sensor-unit">°C</div>
+    </div>
+    <div class="sensor-box">
+      <div class="sensor-icon">💧</div>
+      <div class="sensor-label">Humidity</div>
+      <div id="hum" class="sensor-val">--</div>
+      <div class="sensor-unit">%</div>
+    </div>
+    <div class="sensor-box">
+      <div class="sensor-icon">🌫️</div>
+      <div class="sensor-label">Air Quality</div>
+      <div id="air" class="sensor-val">--</div>
+      <div class="sensor-unit">ppm</div>
+    </div>
+    <div class="sensor-box">
+      <div class="sensor-icon">🔄</div>
+      <div class="sensor-label">Last Updated</div>
+      <div id="last-updated" class="sensor-val" style="font-size:18px">--</div>
+    </div>
   </div>
 
 </div>
