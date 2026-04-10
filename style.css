@@ -33,13 +33,11 @@ body::before {
 /* ── Grid layout ─────────────────────────────────────────── */
 .container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: auto auto 1fr auto;
-  min-height: 100vh;
-  padding: 20px;
+  grid-template-columns: 2fr 1fr;   /* left bigger, right smaller */
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  padding: 15px;
   gap: 15px;
-  position: relative;
-  z-index: 1;
 }
 
 /* ── Top ─────────────────────────────────────────────────── */
@@ -51,7 +49,7 @@ body::before {
 }
 
 #time {
-  font-size: 80px;
+  font-size: 60px;
   font-weight: bold;
   text-shadow: 0 0 20px #00eaff;
   letter-spacing: 2px;
@@ -65,10 +63,10 @@ body::before {
 }
 
 #weather {
-  font-size: 22px;
+  font-size: 20px;
   text-align: right;
   line-height: 1.6;
-  max-width: 260px;
+  max-width: 220px;
 }
 
 /* ── Alert ───────────────────────────────────────────────── */
@@ -90,7 +88,12 @@ body::before {
 @keyframes blink { 50% { opacity: 0.5; } }
 
 /* ── Center & Right ──────────────────────────────────────── */
-.center, .right {
+.center {
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* Announcements | Chart */
+  gap: 15px;
+}
+.right {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -100,7 +103,7 @@ body::before {
 .card {
   border: 1px solid rgba(0,255,255,0.4);
   border-radius: 15px;
-  padding: 20px;
+  padding: 12px;
   background: rgba(0,255,255,0.05);
   backdrop-filter: blur(15px);
   box-shadow:
@@ -189,20 +192,39 @@ li:last-child { border-bottom: none; }
   grid-column: 1 / 3;
   display: flex;
   justify-content: space-evenly;
-  gap: 15px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
 }
 
 .sensor-box {
+  width: 120px;
+  padding: 10px;
+  font-size: 14px;
+}
+#histChart {
+  height: 120px !important;
+}
+
+.chart-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ctab {
   flex: 1;
-  min-width: 130px;
-  border: 1px solid rgba(0,255,255,0.3);
-  padding: 16px 12px;
-  border-radius: 12px;
-  text-align: center;
-  background: rgba(0,255,255,0.05);
-  box-shadow: 0 0 15px rgba(0,255,255,0.15);
-  transition: box-shadow 0.3s;
+  padding: 5px;
+  border: none;
+  background: rgba(0,255,255,0.1);
+  color: #00eaff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.ctab.active {
+  background: #00eaff;
+  color: black;
+  box-shadow: 0 0 10px #00eaff;
 }
 
 .sensor-box:hover { box-shadow: 0 0 25px rgba(0,255,255,0.4); }
@@ -216,6 +238,6 @@ li:last-child { border-bottom: none; }
 @media (max-width: 700px) {
   .container { grid-template-columns: 1fr; }
   .top, .alert, .bottom { grid-column: 1; }
-  #time { font-size: 50px; }
+  #time { font-size: 60px; }
   .top { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
