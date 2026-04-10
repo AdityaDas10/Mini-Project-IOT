@@ -26,24 +26,49 @@
     ⚠️ Air Quality Poor! Stay indoors if possible.
   </div>
 
-  <!-- CENTER: Announcements -->
-  <div class="center">
-    <div class="card">
-      <h2>📢 Announcements</h2>
-      <ul id="announcements"></ul>
-      <!-- INPUT ROW — required for addAnnouncement() to work -->
-      <div class="ann-input-row">
-        <input
-          id="ann-input"
-          class="ann-input"
-          placeholder="Add announcement..."
-          maxlength="100"
-          onkeydown="if(event.key==='Enter') addAnnouncement()"
-        />
-        <button class="ann-btn" onclick="addAnnouncement()">Post</button>
-      </div>
+ <div class="center">
+
+  <!-- ANNOUNCEMENTS -->
+  <div class="card">
+    <h2>📢 Announcements</h2>
+    <ul id="announcements"></ul>
+
+    <div class="ann-input-row">
+      
+      <select id="class-select" class="ann-input">
+        <option value="CSE-A">CSE-A</option>
+        <option value="CSE-B">CSE-B</option>
+        <option value="ECE-A">ECE-A</option>
+        <option value="ECE-B">ECE-B</option>
+      </select>
+
+      <input
+       id="ann-input"
+       class="ann-input"
+      placeholder="Add announcement..."
+      maxlength="100"
+      onkeydown="if(event.key==='Enter') sendAnnouncement()"
+    />
+
+      <button class="ann-btn" onclick="sendAnnouncement()">Post</button>
     </div>
+  </div>  <!-- ✅ CLOSED PROPERLY -->
+
+
+  <!-- SENSOR HISTORY -->
+  <div class="card">
+    <h2>📈 Sensor History</h2>
+
+    <div class="chart-tabs">
+      <button class="ctab active" onclick="switchChart('temp', this)">Temp</button>
+      <button class="ctab" onclick="switchChart('hum', this)">Humidity</button>
+      <button class="ctab" onclick="switchChart('aqi', this)">AQI</button>
+    </div>
+
+    <canvas id="histChart"></canvas>
   </div>
+
+</div>
 
   <!-- RIGHT: Timetable -->
   <div class="right">
@@ -81,7 +106,7 @@
   </div>
 
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
