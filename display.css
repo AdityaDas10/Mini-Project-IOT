@@ -1,0 +1,276 @@
+/* display.css — Smart Campus Display Panel */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: radial-gradient(circle at center, #0a0e14, #000);
+  color: #00eaff;
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  gap: 12px;
+}
+
+/* ── TOP BAR ──────────────────────────────────────────── */
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  border-bottom: 1px solid rgba(0,234,255,0.15);
+  padding-bottom: 12px;
+}
+
+.topbar-left { display: flex; flex-direction: column; gap: 2px; }
+
+#time {
+  font-size: 52px;
+  font-weight: 700;
+  text-shadow: 0 0 20px #00eaff;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+#date { font-size: 16px; opacity: 0.7; }
+
+.campus-title {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 15px #00eaff;
+}
+
+.campus-sub {
+  font-size: 13px;
+  text-align: center;
+  opacity: 0.6;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.topbar-right { text-align: right; }
+
+#weather { font-size: 18px; line-height: 1.6; }
+
+/* ── ALERT ────────────────────────────────────────────── */
+.alert {
+  background: rgba(255,0,0,0.12);
+  border: 1px solid red;
+  border-radius: 10px;
+  color: #ff4d4d;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  animation: blink 1.2s infinite;
+}
+.hidden { display: none !important; }
+@keyframes blink { 50% { opacity: 0.5; } }
+
+/* ── MAIN GRID ────────────────────────────────────────── */
+.main-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 14px;
+  overflow: hidden;
+}
+
+/* ── CARD BASE ────────────────────────────────────────── */
+.card, .announce-panel {
+  background: rgba(0,255,255,0.04);
+  border: 1px solid rgba(0,234,255,0.2);
+  border-radius: 14px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── PANEL HEADER ─────────────────────────────────────── */
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0,234,255,0.15);
+}
+
+.panel-icon { font-size: 20px; }
+
+.panel-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  flex: 1;
+}
+
+.announce-count {
+  background: rgba(0,234,255,0.15);
+  border: 1px solid rgba(0,234,255,0.4);
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 10px;
+  color: #00eaff;
+}
+
+/* ── ANNOUNCEMENT LIST ────────────────────────────────── */
+.announce-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.announce-list::-webkit-scrollbar { width: 4px; }
+.announce-list::-webkit-scrollbar-thumb { background: rgba(0,234,255,0.3); border-radius: 2px; }
+
+.announce-item {
+  background: rgba(0,234,255,0.06);
+  border: 1px solid rgba(0,234,255,0.15);
+  border-left: 4px solid #00eaff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  animation: slideIn 0.4s ease;
+}
+
+.announce-item.new {
+  border-left-color: #00ff96;
+  background: rgba(0,255,150,0.08);
+  animation: slideIn 0.4s ease, glowPulse 2s ease 3;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes glowPulse {
+  0%,100% { box-shadow: none; }
+  50% { box-shadow: 0 0 20px rgba(0,255,150,0.4); }
+}
+
+.announce-text {
+  font-size: 18px;
+  line-height: 1.5;
+  color: #e8f8ff;
+}
+
+.announce-meta {
+  font-size: 12px;
+  color: rgba(0,234,255,0.5);
+  margin-top: 6px;
+}
+
+.empty-msg {
+  text-align: center;
+  opacity: 0.4;
+  font-size: 15px;
+  margin: auto;
+}
+
+/* ── RIGHT COLUMN ─────────────────────────────────────── */
+.right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+/* ── SENSOR ROW ───────────────────────────────────────── */
+.sensor-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.sensor-box {
+  background: rgba(0,255,255,0.04);
+  border: 1px solid rgba(0,234,255,0.2);
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.sensor-icon  { font-size: 20px; margin-bottom: 4px; }
+.sensor-label { font-size: 10px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.08em; }
+.sensor-val   { font-size: 28px; font-weight: 700; text-shadow: 0 0 10px #00eaff; line-height: 1.1; }
+.sensor-unit  { font-size: 11px; opacity: 0.5; }
+
+.sensor-status {
+  font-size: 10px;
+  margin-top: 4px;
+  padding: 2px 6px;
+  border-radius: 99px;
+  display: inline-block;
+}
+
+.s-good { background: rgba(0,255,150,0.15); color: #00ff96; }
+.s-warn { background: rgba(255,200,0,0.15);  color: #ffc800; }
+.s-bad  { background: rgba(255,60,60,0.15);  color: #ff4d4d; }
+
+/* ── TIMETABLE ────────────────────────────────────────── */
+.card { flex: 1; }
+ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+li {
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(0,234,255,0.05);
+  border: 1px solid rgba(0,234,255,0.1);
+}
+
+/* ── LAST UPDATED ─────────────────────────────────────── */
+.last-updated {
+  font-size: 11px;
+  opacity: 0.4;
+  text-align: center;
+  padding: 4px 0;
+}
+
+/* ── VOICE INDICATOR ──────────────────────────────────── */
+.voice-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0,234,255,0.15);
+  border: 1px solid rgba(0,234,255,0.5);
+  border-radius: 99px;
+  padding: 8px 18px;
+  font-size: 14px;
+  z-index: 100;
+  animation: blink 1s infinite;
+}

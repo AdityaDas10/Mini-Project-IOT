@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Campus Display</title>
+  <link rel="stylesheet" href="display.css"/>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div id="time"></div>
+      <div id="date"></div>
+    </div>
+    <div class="topbar-center">
+      <div class="campus-title">Smart Campus</div>
+      <div class="campus-sub">Announcement System</div>
+    </div>
+    <div class="topbar-right">
+      <div id="weather">Loading weather...</div>
+    </div>
+  </div>
+
+  <!-- ALERT BOX -->
+  <div id="alertBox" class="alert hidden">
+    ⚠️ Air Quality Poor! Stay indoors if possible.
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-grid">
+
+    <!-- LEFT: ANNOUNCEMENTS (main focus) -->
+    <div class="announce-panel">
+      <div class="panel-header">
+        <span class="panel-icon">📢</span>
+        <span class="panel-title">Announcements</span>
+        <span class="announce-count" id="announce-count">0</span>
+      </div>
+      <div class="announce-list" id="announce-list">
+        <div class="empty-msg">No announcements yet</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: SENSORS + TIMETABLE -->
+    <div class="right-col">
+
+      <!-- Sensor cards -->
+      <div class="sensor-row">
+        <div class="sensor-box">
+          <div class="sensor-icon">🌡️</div>
+          <div class="sensor-label">Temperature</div>
+          <div id="temp" class="sensor-val">--</div>
+          <div class="sensor-unit">°C</div>
+          <div id="temp-status" class="sensor-status"></div>
+        </div>
+        <div class="sensor-box">
+          <div class="sensor-icon">💧</div>
+          <div class="sensor-label">Humidity</div>
+          <div id="hum" class="sensor-val">--</div>
+          <div class="sensor-unit">%</div>
+          <div id="hum-status" class="sensor-status"></div>
+        </div>
+        <div class="sensor-box">
+          <div class="sensor-icon">🌫️</div>
+          <div class="sensor-label">Air Quality</div>
+          <div id="air" class="sensor-val">--</div>
+          <div class="sensor-unit">ppm</div>
+          <div id="air-status" class="sensor-status"></div>
+        </div>
+      </div>
+
+      <!-- Timetable -->
+      <div class="card">
+        <div class="panel-header">
+          <span class="panel-icon">📅</span>
+          <span class="panel-title">Timetable</span>
+        </div>
+        <ul id="timetable"></ul>
+      </div>
+
+      <!-- Last updated -->
+      <div class="last-updated">
+        Last sensor update: <span id="last-updated">--</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Voice notification indicator -->
+<div id="voice-indicator" class="voice-indicator hidden">
+  🔊 Reading announcement...
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="display.js"></script>
+</body>
+</html>
